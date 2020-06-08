@@ -1,4 +1,4 @@
-import { GET_RECIPES } from '../actions/type';
+import { GET_RECIPES, DELETE_RECIPE, ADD_RECIPE } from '../actions/types';
 
 const initialState = {
     recipes: [
@@ -29,6 +29,16 @@ export default function(state = initialState, action) {
             return {
                 ...state
             };
+        case DELETE_RECIPE:
+            return {
+                ...state,
+                recipes: state.recipes.filter(recipe => recipe.id !== action.payload)
+            }
+        case ADD_RECIPE:
+            return {
+                ...state,
+                recipes: [action.payload, ...state.recipes]
+            } 
         default:
             return state;
     }

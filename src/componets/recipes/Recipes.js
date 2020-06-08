@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import Recipe from './Recipe'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { GET_RECIPES } from '../../actions/types'
+import { getRecipes } from '../../actions/recipeActions';
+
 
 class Recipes extends Component {
 
@@ -32,8 +33,4 @@ const mapStateToProps = (state) => ({
     recipes: state.recipe.recipes
 })
 
-const mapDispatchToProps = (dispatch) => ({
-    getRecipes: () => dispatch({type: GET_RECIPES})
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Recipes);
+export default connect(mapStateToProps, {getRecipes})(Recipes);

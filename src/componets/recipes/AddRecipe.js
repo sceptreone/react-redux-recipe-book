@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import  { v4 as uuidv4 } from 'uuid';
 import TextInputGroup from '../layout/TextInputGroup';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { addRecipe } from '../../actions/recipeActions';
 
 
-class AddRecipe extends Component{
+class AddRecipe extends Component {
 
     state = {
         name: '',
@@ -12,22 +15,22 @@ class AddRecipe extends Component{
         errors: {}
     };
 
-    onSubmit = (dispatch, e) => {
+    onSubmit = e => {
         e.preventDefault();
 
         const { name, ingredients, method } = this.state;
 
-        if(name == ''){
+        if(name === ''){
             this.setState({errors: { name: 'Name is required'}});
             return;
         }
 
-        if(ingredients == ''){
+        if(ingredients === ''){
             this.setState({errors: { ingredients: 'Ingredients is required'}});
             return;
         }
 
-        if(method == ''){
+        if(method === ''){
             this.setState({errors: { method: 'Method is required'}});
             return;
         }
@@ -37,9 +40,9 @@ class AddRecipe extends Component{
             name,
             ingredients,
             method
-        }
+        };
 
-        dispatch({type: 'ADD_RECIPE', payload: newRecipe});
+        this.props.addRecipe(newRecipe);
 
         this.setState({
             name: '',
@@ -55,48 +58,44 @@ class AddRecipe extends Component{
         const { name, ingredients, method, errors } = this.state;
         
         return (
-            <Consumer>
-                {value => {
-                    const { dispatch } = value;
-
-                    return (
-                        <div className="card mb-3">
-                        <div className="card-header">Add Recipe</div>
-                        <div className="card-body">
-                            <form onSubmit={this.onSubmit.bind(this, dispatch)}>
-                                <TextInputGroup 
-                                    label="Name"
-                                    name="name"
-                                    placeholder="Enter Name"
-                                    value={name}
-                                    onChange={this.onChange}
-                                    error={errors.name}
-                                />
-                                <TextInputGroup 
-                                    label="Ingredients"
-                                    name="ingredients"
-                                    placeholder="Enter Ingredients"
-                                    value={ingredients}
-                                    onChange={this.onChange}
-                                    error={errors.ingredients}
-                                />
-                                <TextInputGroup 
-                                    label="Method"
-                                    name="method"
-                                    placeholder="Enter Method"
-                                    value={method}
-                                    onChange={this.onChange}
-                                    error={errors.method}
-                                />  
-                                <input className="btn btn-light btn-block" type="submit" value="Add Recipe"/>
-                            </form>
-                        </div>
-                    </div>
-                    )
-                }}
-            </Consumer>
+            <div className="card mb-3">
+                <div className="card-header">Add Recipe</div>
+                <div className="card-body">
+                    <form onSubmit={this.onSubmit}>
+                        <TextInputGroup 
+                            label="Name"
+                            name="name"
+                            placeholder="Enter Name"
+                            value={name}
+                            onChange={this.onChange}
+                            error={errors.name}
+                        />
+                        <TextInputGroup 
+                            label="Ingredients"
+                            name="ingredients"
+                            placeholder="Enter Ingredients"
+                            value={ingredients}
+                            onChange={this.onChange}
+                            error={errors.ingredients}
+                        />
+                        <TextInputGroup 
+                            label="Method"
+                            name="method"
+                            placeholder="Enter Method"
+                            value={method}
+                            onChange={this.onChange}
+                            error={errors.method}
+                        />  
+                        <input className="btn btn-light btn-block" type="submit" value="Add Recipe"/>
+                    </form>
+                </div>
+            </div>
         )
     }
 }
 
-export default AddRecipe;
+AddRecipe.propTypes = {
+    addRecipe: PropTypes.func.isRequired
+}
+
+export default connect(null, { addRecipe })(AddRecipe);
